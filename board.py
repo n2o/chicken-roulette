@@ -1,8 +1,5 @@
 import pyglet
-from random import randint
-
-red   = (255,0,0, 255,0,0, 255,0,0, 255,0,0)
-green = (0,255,0, 0,255,0, 0,255,0, 0,255,0)
+from random import randint, shuffle
 
 
 class Board(object):
@@ -14,24 +11,34 @@ class Board(object):
         self.window_height = window_height
         self.rows = rows
         self.cols = cols
+        self.lots = list(range(rows * cols))
+        shuffle(self.lots)
         self.calc_tilesize()
         self.create_tiles()
         self.batch = pyglet.graphics.Batch()
+        
         
     def calc_tilesize(self):
         self.tile_width = self.window_width / self.cols
         self.tile_height = self.window_height / self.rows
 
-    def create_tiles(self):
+    def create_tiles(self):        
         for col in range(self.cols):
             for row in range(self.rows):
+                # Choose random color
                 c1 = randint(0, 255)
                 c2 = randint(0, 255)
                 c3 = randint(0, 255)
                 color = (c1,c2,c3, c1,c2,c3, c1,c2,c3, c1,c2,c3)
+
+                # Pick random lot
+                lot_index = randint(0, len(self.lots)-1)
+                lot = self.lots[lot_index]
+                self.lots.remove(lot)
+                
                 x = (col % self.cols) * self.tile_width
                 y = (row % self.rows) * self.tile_height
-                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, 1))
+                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, lot))
     
 
 class Tile(object):
@@ -44,13 +51,15 @@ class Tile(object):
         self.color = color
         self.lot = lot
         self.label = None
+        self.image = None
     
     def draw_rect(self, color):
-        width = int(round(self.width))
-        height = int(round(self.height))
-        image_pattern = pyglet.image.SolidColorImagePattern(color=color)
-        image = image_pattern.create_image(width, height)
-        image.blit(self.x, self.y)
+        if not self.image:
+            width = int(round(self.width))
+            height = int(round(self.height))
+            image_pattern = pyglet.image.SolidColorImagePattern(color=color)
+            self.image = image_pattern.create_image(width, height)
+        self.image.blit(self.x, self.y)
 
     def draw(self):
         x = int(round(self.x))

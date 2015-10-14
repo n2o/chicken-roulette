@@ -43,10 +43,6 @@ def update(dt):
 def on_draw():
     window.clear()
     red = (255,0,0, 255,0,0, 255,0,0, 255,0,0)
-    #pyglet.graphics.draw(4, pyglet.gl.GL_QUADS,
-    #                     ('v2i', [10, 10, 100, 10, 100, 100, 10, 100]),
-    #                     ('c3B', red))
-    #board.tiles[0].draw()
     for tile in board.tiles:
         tile.draw()
     chicken.draw()
