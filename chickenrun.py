@@ -5,8 +5,8 @@ import sys
 import chicken, resources, board
 import math
 
-if len(sys.argv) < 2:
-    print("Usage: ./chickenrun.py number-of-lots")
+if len(sys.argv) < 3:
+    print("Usage: ./chickenrun.py rows cols")
     sys.exit(-1)
 
 vidPath="chickenrun.mp4"
@@ -27,7 +27,7 @@ label = pyglet.text.Label('-1',
                           anchor_x='center', anchor_y='center')
 
 chicken = chicken.Chicken(resources.chicken_sprite)
-board = board.Board(window_width, window_height, 5, 5)
+board = board.Board(window_width, window_height, rows, cols)
 chicken.x = window_width//2
 chicken.y = window_height//2
 
@@ -39,9 +39,16 @@ def update(dt):
 @window.event
 def on_draw():
     window.clear()
+    red = (255,0,0, 255,0,0, 255,0,0, 255,0,0)
+    #pyglet.graphics.draw(4, pyglet.gl.GL_QUADS,
+    #                     ('v2i', [10, 10, 100, 10, 100, 100, 10, 100]),
+    #                     ('c3B', red))
+    #board.tiles[0].draw()
+    for tile in board.tiles:
+        tile.draw()
     chicken.draw()
-    makeCircle(200, (chicken.x + chicken.image.get_max_width()/2), (chicken.y + chicken.image.get_max_height()/2 - 20))
-    circle.draw(pyglet.gl.GL_LINE_LOOP)
+    #makeCircle(200, (chicken.x + chicken.image.get_max_width()/2), (chicken.y + chicken.image.get_max_height()/2 - 20))
+    #circle.draw(pyglet.gl.GL_LINE_LOOP)
     #if player.source and player.source.video_format:
     #    player.get_texture().blit(0,0)
     #    if player.time > 9 and player.time < 19:

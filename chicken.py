@@ -28,7 +28,6 @@ class Chicken(pyglet.sprite.Sprite):
         rand = randint(0, 100)
         if rand > 95:
             rand = randint(1, 12)
-            print(rand)
             if rand == 1:
                 self.switch_toggles(1, 1, 1, 1)
             elif rand == 2:
@@ -56,9 +55,9 @@ class Chicken(pyglet.sprite.Sprite):
         self.move(dt)
 
     def check_bounds(self):
-        min_x = 0
-        min_y = 0
-        max_x = 838 - self.image.get_max_width()
+        min_x = -self.image.get_max_width()/2
+        min_y = -self.image.get_max_height()/2
+        max_x = 838 - self.image.get_max_width()/2
         max_y = 480 - self.image.get_max_height()/2
         if self.x < min_x:
             self.x = max_x
