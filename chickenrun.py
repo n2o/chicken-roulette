@@ -9,6 +9,9 @@ if len(sys.argv) < 3:
     print("Usage: ./chickenrun.py rows cols")
     sys.exit(-1)
 
+rows = int(sys.argv[1])
+cols = int(sys.argv[2])
+    
 vidPath="chickenrun.mp4"
 window_width = 838
 window_height = 480

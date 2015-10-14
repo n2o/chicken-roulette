@@ -16,7 +16,8 @@ class Board(object):
         self.cols = cols
         self.calc_tilesize()
         self.create_tiles()
-
+        self.batch = pyglet.graphics.Batch()
+        
     def calc_tilesize(self):
         self.tile_width = self.window_width / self.cols
         self.tile_height = self.window_height / self.rows
@@ -30,17 +31,19 @@ class Board(object):
                 color = (c1,c2,c3, c1,c2,c3, c1,c2,c3, c1,c2,c3)
                 x = (col % self.cols) * self.tile_width
                 y = (row % self.rows) * self.tile_height
-                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color))
+                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, 1))
     
 
 class Tile(object):
     """ Class for tiles """
-    def __init__(self, x, y, width, height, color):
+    def __init__(self, x, y, width, height, color, lot):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.color = color
+        self.lot = lot
+        self.label = None
     
     def draw_rect(self, color):
         width = int(round(self.width))
@@ -54,7 +57,15 @@ class Tile(object):
         y = int(round(self.y))
         dx = int(round(self.width))
         dy = int(round(self.height))
+        if not self.label:
+            self.label = pyglet.text.Label(str(self.lot),
+                                           font_name='Helvetica',
+                                           font_size=100,
+                                           x=x+dx//2, y=y+dy//2,
+                                           anchor_x='center', anchor_y='center')
         pyglet.graphics.draw(4, pyglet.gl.GL_QUADS,
                              ('v2i', [x, y, x+dx, y, x+dx, y+dy, x, y+dy]),
                              ('c3B', self.color))
+        self.label.draw()
+                          
 
