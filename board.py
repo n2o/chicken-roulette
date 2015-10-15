@@ -69,7 +69,7 @@ class Tile(object):
         if not self.label:
             self.label = pyglet.text.Label(str(self.lot),
                                            font_name='Helvetica',
-                                           font_size=100,
+                                           font_size=50,
                                            x=x+dx//2, y=y+dy//2,
                                            anchor_x='center', anchor_y='center')
         pyglet.graphics.draw(4, pyglet.gl.GL_QUADS,

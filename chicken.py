@@ -1,5 +1,6 @@
 import pyglet, resources
 from random import randint
+import time
 
 
 class Chicken(pyglet.sprite.Sprite):
@@ -7,9 +8,10 @@ class Chicken(pyglet.sprite.Sprite):
     toggle_y = 1
     dir_x = 1
     dir_y = 1
+    dead = False
 
     def __init__(self, *args, **kwargs):
-        super(Chicken, self).__init__(*args, **kwargs)
+        super(Chicken, self).__init__(resources.chicken_sprite, *args, **kwargs)
         self.velocity_x = 200.0
         self.velocity_y = 200.0
 
@@ -23,6 +25,17 @@ class Chicken(pyglet.sprite.Sprite):
         self.x += self.toggle_x * self.dir_x * self.velocity_x * dt
         self.y += self.toggle_y * self.dir_y * self.velocity_y * dt
         self.check_bounds()
+
+    def die(self):
+        rand = randint(1,5)
+        time.sleep(rand)
+        while self.velocity_x > 0:
+            dv = randint(0, 10)
+            self.velocity_x -= dv
+            self.velocity_y -= dv
+            time.sleep(randint(0, 100)/100)
+        self.dead = True
+        self.image = resources.chicken_dead
         
     def update(self, dt):
         rand = randint(0, 100)
@@ -58,7 +71,7 @@ class Chicken(pyglet.sprite.Sprite):
         min_x = -self.image.get_max_width()/2
         min_y = -self.image.get_max_height()/2
         max_x = 838 - self.image.get_max_width()/2
-        max_y = 480 - self.image.get_max_height()/2
+        max_y = 500 - self.image.get_max_height()/2
         if self.x < min_x:
             self.x = max_x
         elif self.x > max_x:

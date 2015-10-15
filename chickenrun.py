@@ -4,6 +4,9 @@ from random import shuffle, randint
 import sys
 import chicken, resources, board
 import math
+import time
+from threading import Thread
+
 
 if len(sys.argv) < 3:
     print("Usage: ./chickenrun.py rows cols")
@@ -23,20 +26,19 @@ MediaLoad = pyglet.media.load(vidPath)
 #player.queue(MediaLoad)
 #player.play()
 
-label = pyglet.text.Label('-1',
-                          font_name='Helvetica',
-                          font_size=100,
-                          x=window.width//2, y=window.height//2,
-                          anchor_x='center', anchor_y='center')
-
-chicken = chicken.Chicken(resources.chicken_sprite)
 board = board.Board(window_width, window_height, rows, cols)
+chicken = chicken.Chicken()
 chicken.x = window_width//2
 chicken.y = window_height//2
 
+# Start thread to slow down the chicken
+t = Thread(target=chicken.die, args=())
+t.start()
+
 
 def update(dt):
-    chicken.update(dt)
+    if not chicken.dead:
+        chicken.update(dt)
 
     
 @window.event
