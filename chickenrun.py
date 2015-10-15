@@ -28,8 +28,8 @@ MediaLoad = pyglet.media.load(vidPath)
 
 board = board.Board(window_width, window_height, rows, cols)
 chicken = chicken.Chicken()
-chicken.x = window_width//2
-chicken.y = window_height//2
+chicken.x = randint(0, window_width)
+chicken.y = randint(0, window_height)
 
 # Start thread to slow down the chicken
 t = Thread(target=chicken.die, args=())
@@ -48,8 +48,6 @@ def on_draw():
     for tile in board.tiles:
         tile.draw()
     chicken.draw()
-    #makeCircle(200, (chicken.x + chicken.image.get_max_width()/2), (chicken.y + chicken.image.get_max_height()/2 - 20))
-    #circle.draw(pyglet.gl.GL_LINE_LOOP)
     #if player.source and player.source.video_format:
     #    player.get_texture().blit(0,0)
     #    if player.time > 9 and player.time < 19:
@@ -58,16 +56,6 @@ def on_draw():
     #        label.x = window.width//2
     #        label.y = window.height//2
     #        label.draw()
-
-def makeCircle(numPoints, cx, cy):
-    global circle
-    verts = []
-    for i in range(numPoints):
-        angle = math.radians(float(i)/numPoints * 360.0)
-        x = 10 * math.cos(angle) + int(cx)
-        y = 10 * math.sin(angle) + int(cy)
-        verts += [x, y]
-    circle = pyglet.graphics.vertex_list(numPoints, ('v2f', verts))
 
     
 pyglet.clock.schedule_interval(update, 1/120.0)

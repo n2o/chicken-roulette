@@ -38,7 +38,7 @@ class Board(object):
                 
                 x = (col % self.cols) * self.tile_width
                 y = (row % self.rows) * self.tile_height
-                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, lot))
+                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, lot+1))
     
 
 class Tile(object):
