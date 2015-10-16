@@ -13,9 +13,7 @@ from chicken import Chicken
 
 # Prepare winner screen
 trigger_winner = False
-video_running = True
-
-STATE = "lottery"
+STATE = "lottery_init"
 
 
 def show_winner_screen():
@@ -25,7 +23,10 @@ def show_winner_screen():
     
 
 def video_finished():
-    video_running = False
+    global STATE
+    print("Video finished")
+    STATE = "lottery"
+    pyglet.app.run()
     
     
 def main():
@@ -36,28 +37,29 @@ def main():
     rows = int(sys.argv[1])
     cols = int(sys.argv[2])
 
-    vidPath="chickenrun.mp4"
     window_width = 838
     window_height = 480
     window = pyglet.window.Window(width=window_width, height=window_height, fullscreen=False)
     player = pyglet.media.Player()
-    source = pyglet.media.StreamingSource()
-    MediaLoad = pyglet.media.load(vidPath)
-
-    #player.queue(MediaLoad)
-    #player.eos_action = player.EOS_STOP
-    #player.on_player_eos = video_finished()
-    #player.on_eos = video_finished()
-    #player.play()
-
     board = Board(window_width, window_height, rows, cols)
     chicken = Chicken()
-    chicken.x = randint(0, window_width-1)
-    chicken.y = randint(0, window_height-1)
 
-    # Start thread to slow down the chicken
-    Thread(target=chicken.die, args=()).start()
-
+    def chickenrun_init():
+        chicken.x = randint(0, window_width-1)
+        chicken.y = randint(0, window_height-1)
+        # Start thread to slow down the chicken
+        Thread(target=chicken.die, args=()).start()
+        pyglet.clock.schedule_interval(update, 1/120.0)
+    
+    def play_movie():
+        vidPath = "test.mp4"
+        source = pyglet.media.StreamingSource()
+        MediaLoad = pyglet.media.load(vidPath)
+        player.queue(MediaLoad)
+        player.eos_action = player.EOS_STOP
+        player.on_player_eos = video_finished()
+        player.on_eos = video_finished()
+        player.play()
 
     def update(dt):
         global trigger_winner
@@ -67,7 +69,6 @@ def main():
             Thread(target=show_winner_screen, args=()).start()
             trigger_winner = True
     
-
     def winner_screen():
         busstop = pyglet.sprite.Sprite(img=resources.busstop, x=0, y=0)
         busstop.draw()
@@ -81,20 +82,32 @@ def main():
             tile.label = None
             tile.draw(window_width//2 - tile.width//2, window_height//2 - tile.height//2)
         label.draw()
-    
 
+    
     @window.event
     def on_draw():
         global STATE
         window.clear()
+        print(STATE)
 
-        if STATE is "lottery":
+        if STATE is "intro":
+            play_movie()
+            STATE = "intro_running"
+        elif STATE is "intro_running":
+            if player.source and player.source.video_format:
+                player.get_texture().blit(0,0)
+        elif STATE is "lottery_init":
+            chickenrun_init()
+            STATE = "lottery"
+        elif STATE is "lottery":
             for tile in board.tiles:
                 tile.draw()
             chicken.draw()
         elif STATE is "winner":
             winner_screen()
             chicken.draw()
+        else:
+            print("Invalid state")
         
         #if video_running:
         #    if player.source and player.source.video_format:
@@ -108,10 +121,7 @@ def main():
     #        label.y = window.height//2
     #        label.draw()
     
-    pyglet.clock.schedule_interval(update, 1/120.0)
-    pyglet.app.run()
-
-
 
 if __name__ == "__main__":
     main()
+    pyglet.app.run()
