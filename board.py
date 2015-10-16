@@ -1,7 +1,7 @@
 import pyglet
 from random import randint, shuffle
 
-
+    
 class Board(object):
     """ Initialize board, which creates the tiles """
     tiles = list()
@@ -39,8 +39,14 @@ class Board(object):
                 x = (col % self.cols) * self.tile_width
                 y = (row % self.rows) * self.tile_height
                 self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, lot+1))
-    
 
+    def get_tile(self, x, y):
+        for tile in self.tiles:
+            if tile.in_range(x,y):
+                return tile
+        return False
+
+    
 class Tile(object):
     """ Class for tiles """
     def __init__(self, x, y, width, height, color, lot):
@@ -53,17 +59,13 @@ class Tile(object):
         self.label = None
         self.image = None
     
-    def draw_rect(self, color):
-        if not self.image:
-            width = int(round(self.width))
-            height = int(round(self.height))
-            image_pattern = pyglet.image.SolidColorImagePattern(color=color)
-            self.image = image_pattern.create_image(width, height)
-        self.image.blit(self.x, self.y)
-
-    def draw(self):
-        x = int(round(self.x))
-        y = int(round(self.y))
+    def draw(self, x=None, y=None):
+        if not x and not y:
+            x = int(round(self.x))
+            y = int(round(self.y))
+        else:
+            x = int(round(x))
+            y = int(round(y))
         dx = int(round(self.width))
         dy = int(round(self.height))
         if not self.label:
@@ -76,5 +78,10 @@ class Tile(object):
                              ('v2i', [x, y, x+dx, y, x+dx, y+dy, x, y+dy]),
                              ('c3B', self.color))
         self.label.draw()
-                          
+
+    def in_range(self, x, y):
+        if self.x <= x <= self.x+self.width:
+            if self.y <= y <= self.y+self.height:
+                return True
+        return False
 
