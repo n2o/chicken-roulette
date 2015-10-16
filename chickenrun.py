@@ -12,15 +12,16 @@ from chicken import Chicken
 
 
 # Prepare winner screen
-show_winner = False
 trigger_winner = False
 video_running = True
 
+STATE = "lottery"
+
 
 def show_winner_screen():
-    global show_winner
+    global STATE
     time.sleep(1)
-    show_winner = True
+    STATE = "winner"
     
 
 def video_finished():
@@ -68,36 +69,37 @@ def main():
     
 
     def winner_screen():
-        label = pyglet.text.Label("Gewonnen hat:",
-                                  font_name='Helvetica',
+        busstop = pyglet.sprite.Sprite(img=resources.busstop, x=0, y=0)
+        busstop.draw()
+        label = pyglet.text.Label("Gewonnen hat:",              
+                                  font_name='Helvetica',        
                                   font_size=50,
                                   x=window_width//2, y=window_height-100,
                                   anchor_x='center', anchor_y='center')
-        label.draw()
         tile = board.get_tile(chicken.x+chicken.image.get_max_width()//2, chicken.y+chicken.image.get_max_width()//2)
-
-        tile.label = None
-        tile.draw(window_width//2 - tile.width//2, window_height//2 - tile.height//2)
+        if tile:
+            tile.label = None
+            tile.draw(window_width//2 - tile.width//2, window_height//2 - tile.height//2)
+        label.draw()
     
 
     @window.event
     def on_draw():
-        global show_winner
-        #global video_running
+        global STATE
         window.clear()
 
+        if STATE is "lottery":
+            for tile in board.tiles:
+                tile.draw()
+            chicken.draw()
+        elif STATE is "winner":
+            winner_screen()
+            chicken.draw()
+        
         #if video_running:
         #    if player.source and player.source.video_format:
         #        player.get_texture().blit(0,0)
         #else:
-        if not show_winner:
-            for tile in board.tiles:
-                tile.draw()
-            chicken.draw()
-        else:
-            winner_screen()
-            chicken.draw()
-
     #
     #    if player.time > 9 and player.time < 19:
     #        label.draw()
@@ -105,7 +107,6 @@ def main():
     #        label.x = window.width//2
     #        label.y = window.height//2
     #        label.draw()
-
     
     pyglet.clock.schedule_interval(update, 1/120.0)
     pyglet.app.run()

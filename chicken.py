@@ -27,12 +27,12 @@ class Chicken(pyglet.sprite.Sprite):
         self.check_bounds()
 
     def die(self):
-        #rand = randint(1,5)
-        rand = 1
+        rand = randint(1,5)
+        #rand = 1
         time.sleep(rand)
         while self.velocity_x > 0:
-            #dv = randint(0, 10)
-            dv = 30
+            dv = randint(0, 10)
+            #dv = 30
             self.velocity_x -= dv
             self.velocity_y -= dv
             time.sleep(randint(0, 100)/100)

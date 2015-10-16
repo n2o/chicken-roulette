@@ -12,4 +12,5 @@ sprites = map(lambda s: pyglet.resource.image('headless/chicken' + str(s) + '.pn
 chicken_sprite = pyglet.image.Animation.from_image_sequence(sprites, 0.1, True)
 
 sprites_dead = [pyglet.resource.image('headless/chicken_dead.png')]
-chicken_dead = pyglet.image.Animation.from_image_sequence(sprites_dead, 0.1, True)
+chicken_dead = pyglet.image.Animation.from_image_sequence(sprites_dead, 10, True)
+busstop = pyglet.resource.image('busstop_fitting.jpg')
