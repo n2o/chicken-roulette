@@ -6,16 +6,17 @@ class Board(object):
     """ Initialize board, which creates the tiles """
     tiles = list()
 
-    def __init__(self, window_width, window_height, rows, cols):
+    def __init__(self, window_width, window_height, rows, cols, names):
         self.window_width = window_width
         self.window_height = window_height
         self.rows = rows
         self.cols = cols
-        self.lots = list(range(rows * cols))
+        self.lots = names
         shuffle(self.lots)
         self.calc_tilesize()
         self.create_tiles()
         self.batch = pyglet.graphics.Batch()
+        self.names = names
         
         
     def calc_tilesize(self):
@@ -38,7 +39,7 @@ class Board(object):
                 
                 x = (col % self.cols) * self.tile_width
                 y = (row % self.rows) * self.tile_height
-                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, lot+1))
+                self.tiles.append(Tile(x, y, self.tile_width, self.tile_height, color, lot))
 
     def get_tile(self, x, y):
         for tile in self.tiles:
