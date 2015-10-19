@@ -104,15 +104,16 @@ def main():
 
     @window.event
     def on_key_press(symbol, modifiers):
-        global player
         global STATE
-        STATE = "lottery_init"
-        player.pause()
-        # Create a player and queue the song
-        player = pyglet.media.Player()
-        sound = pyglet.media.load('jingle_loop.m4a', streaming=False)
-        player.queue(sound) 
-        player.play()
+        if STATE == "intro_running":
+            global player
+            STATE = "lottery_init"
+            player.pause()
+            # Create a player and queue the song
+            player = pyglet.media.Player()
+            sound = pyglet.media.load('jingle_loop.m4a', streaming=False)
+            player.queue(sound) 
+            player.play()
 
     @window.event
     def on_draw():
