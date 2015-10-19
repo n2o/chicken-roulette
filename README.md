@@ -23,3 +23,5 @@ Example:
 ```bash
 $ python chickenrun.py 2 2 Alice Bob Charly Trudy
 ```
+
+![Chicken](http://i.imgur.com/vpTEFDW.png)
