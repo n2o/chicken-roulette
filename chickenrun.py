@@ -89,7 +89,7 @@ def main():
     def winner_screen():
         """ Show winner screen """
         pyglet.sprite.Sprite(img=resources.busstop, x=0, y=0).draw()    # Print busstop image
-        label = pyglet.text.Label("Gewonnen hat:",
+        label = pyglet.text.Label("Winner is:",
                                   font_name='Helvetica',
                                   font_size=50,
                                   x=window_width//2, y=window_height-100,
