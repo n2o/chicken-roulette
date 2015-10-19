@@ -12,6 +12,7 @@ the app running.
 
 ## Usage
 The tool expects many command-line arguments:
+
 1. rows: number of rows on the board
 2. cols: number of columns on the board
 3. names*: place any number of names / numbers, which should appear on the board
@@ -22,3 +23,5 @@ Example:
 ```bash
 $ python chickenrun.py 2 2 Alice Bob Charly Trudy
 ```
+
+![Chicken](http://i.imgur.com/vpTEFDW.png)
